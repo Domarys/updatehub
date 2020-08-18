@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+mod bita;
 mod copy;
 mod flash;
 mod imxkobs;
@@ -19,8 +20,8 @@ pub mod definitions;
 /// Objects representing each possible install mode
 pub mod objects {
     pub use crate::{
-        copy::Copy, flash::Flash, imxkobs::Imxkobs, raw::Raw, tarball::Tarball, test::Test,
-        ubifs::Ubifs,
+        bita::Bita, copy::Copy, flash::Flash, imxkobs::Imxkobs, raw::Raw, tarball::Tarball,
+        test::Test, ubifs::Ubifs,
     };
 }
 pub use update_package::{SupportedHardware, UpdatePackage};
@@ -32,6 +33,7 @@ use serde::Deserialize;
 #[serde(tag = "mode")]
 #[serde(rename_all = "lowercase")]
 pub enum Object {
+    Bita(Box<objects::Bita>),
     Copy(Box<objects::Copy>),
     Flash(Box<objects::Flash>),
     Imxkobs(Box<objects::Imxkobs>),
