@@ -6,7 +6,7 @@ use super::Result;
 use crate::utils;
 use openssl::sha::Sha256;
 use pkg_schema::{
-    objects::{Copy, Flash, Imxkobs, Raw, Tarball, Test, Ubifs},
+    objects::{Bita, Copy, Flash, Imxkobs, Raw, Tarball, Test, Ubifs},
     Object,
 };
 use std::{
@@ -26,12 +26,13 @@ pub(crate) enum Status {
 impl_compressed_object_info!(Copy);
 impl_compressed_object_info!(Raw);
 impl_compressed_object_info!(Ubifs);
+impl_object_info!(Bita);
 impl_object_info!(Flash);
 impl_object_info!(Imxkobs);
 impl_object_info!(Tarball);
 impl_object_info!(Test);
 
-impl_object_for_object_types!(Copy, Flash, Imxkobs, Tarball, Ubifs, Raw, Test);
+impl_object_for_object_types!(Bita, Copy, Flash, Imxkobs, Tarball, Ubifs, Raw, Test);
 
 pub(crate) trait Info {
     fn status(&self, download_dir: &Path) -> Result<Status> {
