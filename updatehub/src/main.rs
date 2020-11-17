@@ -4,6 +4,10 @@
 use argh::FromArgs;
 use slog_scope::info;
 use std::path::PathBuf;
+use lettre::transport::smtp::authentication::Credentials;
+use lettre::{Message, SmtpTransport, Transport};
+//add sdk support
+use sdk::listener;
 
 #[derive(FromArgs)]
 /// Top-level command.
@@ -194,12 +198,37 @@ async fn client_main(client_options: ClientOptions) -> updatehub::Result<()> {
 
 #[async_std::main]
 async fn main() {
+
     let cmd: TopLevel = argh::from_env();
+
+    let mut listener = listener::StateChange::default();
+    listener.on_state(listener::State::Probe, |mut handler| async move {
+        // email function
+        let email = Message::builder()
+            .from("Test <domarystest@gmail.com>".parse().unwrap())
+            .reply_to("Teste <domarystest@gmail.com>".parse().unwrap())
+            .to("Domy <domaryscorrea@gmail.com>".parse().unwrap())
+            .subject("internal! in main, it's working")
+            .body("callback!")
+            .unwrap();
+
+        let creds = Credentials::new("domarystest@gmail.com".to_string(), "@test1234".to_string());
+
+        let mailer = SmtpTransport::relay("smtp.gmail.com")
+            .unwrap()
+            .credentials(creds)
+            .build();
+
+         let _result = mailer.send(&email);
+        // keeping - stop the state
+        handler.cancel().await
+    });
 
     let res = match cmd.entry_point {
         EntryPoints::Client(client) => client_main(client).await,
         EntryPoints::Server(cmd) => server_main(cmd).await,
     };
+
 
     if let Err(e) = res {
         eprintln!("{}", e);

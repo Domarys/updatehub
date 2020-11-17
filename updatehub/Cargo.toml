@@ -44,6 +44,7 @@ easy_process = "0.2"
 find-binary-version = "0.3"
 infer = "0.2"
 lazy_static = "1"
+lettre = "0.10.0-alpha.4"
 mockito = { version = "0.27", optional = true }
 ms-converter = "1"
 nix = "0.19"

@@ -12,6 +12,7 @@ edition = "2018"
 async-std = { version = "1.6", default-features = false, features = ["std"] }
 chrono = { version = "0.4", default-features = false, features = ["serde"] }
 derive_more = { version = "0.99", default-features = false, features = ["display", "error", "from"] }
+lettre = "0.10.0-alpha.4"
 log = "0.4"
 ms-converter = "1"
 serde = { version = "1", default-features = false, features = ["derive"] }
